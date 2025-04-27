@@ -18,6 +18,7 @@ struct StatuspageEvent {
 
 #[derive(Clone, Deserialize)]
 struct StatuspageIncident {
+    #[serde(default = "bool::default")]
     backfilled: bool,
     status: String,
     shortlink: String,
