@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use atrium_api::app::bsky::embed::external::ExternalData;
 use atrium_api::app::bsky::feed::post::{RecordData, RecordEmbedRefs::AppBskyEmbedExternalMain};
 use atrium_api::types::string::{Datetime, Language};
@@ -34,34 +36,46 @@ struct StatuspageIncidentUpdate {
     display_at: OffsetDateTime,
 }
 
-fn to_bsky_post(incident_name: String, status: String, update: String, link: String) -> RecordData {
-    let embed = Some(atrium_api::types::Union::Refs(AppBskyEmbedExternalMain(
-        Box::new(atrium_api::types::Object {
-            data: atrium_api::app::bsky::embed::external::MainData {
-                external: atrium_api::types::Object {
-                    data: ExternalData {
-                        description: update.clone(),
-                        thumb: None,
-                        title: incident_name,
-                        uri: link,
+impl TryFrom<StatuspageIncident> for RecordData {
+    type Error = Error;
+
+    fn try_from(incident: StatuspageIncident) -> Result<RecordData, Self::Error> {
+        let mut sorted_updates = incident.incident_updates.clone();
+        sorted_updates.sort_by(|update1, update2| update2.display_at.cmp(&update1.display_at));
+
+        let latest_update = sorted_updates
+            .first()
+            .ok_or(Error::from("No incident update information provided"))?;
+        let update_text: String = latest_update.body.chars().take(250).collect();
+
+        let embed = Some(atrium_api::types::Union::Refs(AppBskyEmbedExternalMain(
+            Box::new(atrium_api::types::Object {
+                data: atrium_api::app::bsky::embed::external::MainData {
+                    external: atrium_api::types::Object {
+                        data: ExternalData {
+                            description: update_text.clone(),
+                            thumb: None,
+                            title: incident.name,
+                            uri: incident.shortlink,
+                        },
+                        extra_data: Ipld::Null,
                     },
-                    extra_data: Ipld::Null,
                 },
-            },
-            extra_data: Ipld::Null,
-        }),
-    )));
-    let langs = Some(vec![Language::new("en".into()).unwrap()]);
-    RecordData {
-        created_at: Datetime::now(),
-        embed,
-        entities: None,
-        facets: None,
-        labels: None,
-        langs,
-        reply: None,
-        tags: None,
-        text: format!("[update] {}: {}", status, update),
+                extra_data: Ipld::Null,
+            }),
+        )));
+        let langs = Some(vec![Language::new("en".into()).unwrap()]);
+        Ok(RecordData {
+            created_at: Datetime::from_str(&latest_update.display_at.to_string())?,
+            embed,
+            entities: None,
+            facets: None,
+            labels: None,
+            langs,
+            reply: None,
+            tags: None,
+            text: format!("[update] {}: {}", incident.status, update_text),
+        })
     }
 }
 
@@ -77,26 +91,10 @@ async fn function_handler(event: Request) -> Result<Response<Body>, Error> {
         if incident.backfilled {
             info!("skipping backfilled incident");
         } else {
-            let mut sorted_updates = incident.incident_updates.clone();
-            sorted_updates.sort_by(|update1, update2| update2.display_at.cmp(&update1.display_at));
-
-            let update_text: String = sorted_updates
-                .first()
-                .ok_or(Error::from("No incident update information provided"))?
-                .body
-                .chars()
-                .take(250)
-                .collect();
-
             let bsky_agent = BskyAgent::builder().build().await?;
             bsky_agent.login(bsky_username, bsky_password).await?;
             bsky_agent
-                .create_record(to_bsky_post(
-                    incident.name,
-                    incident.status,
-                    update_text,
-                    incident.shortlink,
-                ))
+                .create_record(RecordData::try_from(incident)?)
                 .await?;
         }
     } else {
