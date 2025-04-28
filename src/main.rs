@@ -9,7 +9,7 @@ use lambda_http::{
     Body, Error, Request, RequestPayloadExt, Response,
 };
 use serde::Deserialize;
-use time::OffsetDateTime;
+use serde_with::{serde_as, DisplayFromStr};
 
 #[derive(Clone, Deserialize)]
 struct StatuspageEvent {
@@ -26,12 +26,14 @@ struct StatuspageIncident {
     name: String,
 }
 
+#[serde_as]
 #[derive(Clone, Deserialize)]
 struct StatuspageIncidentUpdate {
+    #[serde_as(as = "_")]
     body: String,
 
-    #[serde(with = "time::serde::iso8601")]
-    display_at: OffsetDateTime,
+    #[serde_as(as = "DisplayFromStr")]
+    display_at: Datetime,
 }
 
 impl TryFrom<StatuspageIncident> for RecordData {
@@ -64,7 +66,7 @@ impl TryFrom<StatuspageIncident> for RecordData {
         )));
         let langs = Some(vec![Language::new("en".into()).unwrap()]);
         Ok(RecordData {
-            created_at: Datetime::now(),
+            created_at: latest_update.display_at.clone(),
             embed,
             entities: None,
             facets: None,
