@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 use atrium_api::app::bsky::embed::external::ExternalData;
 use atrium_api::app::bsky::feed::post::{RecordData, RecordEmbedRefs::AppBskyEmbedExternalMain};
 use atrium_api::types::string::{Datetime, Language};
@@ -66,7 +64,7 @@ impl TryFrom<StatuspageIncident> for RecordData {
         )));
         let langs = Some(vec![Language::new("en".into()).unwrap()]);
         Ok(RecordData {
-            created_at: Datetime::from_str(&latest_update.display_at.to_string())?,
+            created_at: Datetime::now(),
             embed,
             entities: None,
             facets: None,
