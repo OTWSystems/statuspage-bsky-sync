@@ -52,6 +52,7 @@ Read more about invoking the function in [the Cargo Lambda documentation for the
 
 ## Deploying
 
-To deploy the project, run `cargo lambda deploy`. This will create an IAM role and a Lambda function in your AWS account.
+To deploy the project, run `cargo lambda deploy`. This will create an IAM role and a Lambda function in your AWS account. Then, go the `statuspage-bsky-sync` lambda's
+environment variable configuration (Configuration > Environment variables) and set `BSKY_USERNAME` and `BSKY_PASSWORD` to your Bluesky account's credentials.
 
 Read more about deploying your lambda function in [the Cargo Lambda documentation](https://www.cargo-lambda.info/commands/deploy.html).
