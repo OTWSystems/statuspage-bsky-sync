@@ -2,6 +2,7 @@ use atrium_api::app::bsky::embed::external::ExternalData;
 use atrium_api::app::bsky::feed::post::{RecordData, RecordEmbedRefs::AppBskyEmbedExternalMain};
 use atrium_api::types::string::{Datetime, Language};
 use bsky_sdk::BskyAgent;
+use convert_case::{Case, Casing};
 use ipld_core::ipld::Ipld;
 use lambda_http::{
     run, service_fn,
@@ -74,7 +75,11 @@ impl TryFrom<StatuspageIncident> for RecordData {
             langs,
             reply: None,
             tags: None,
-            text: format!("[update] {}: {}", incident.status, update_text),
+            text: format!(
+                "[update] {}: {}",
+                incident.status.to_case(Case::Title),
+                update_text
+            ),
         })
     }
 }
