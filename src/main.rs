@@ -2,6 +2,7 @@ use atrium_api::app::bsky::embed::external::ExternalData;
 use atrium_api::app::bsky::feed::post::{RecordData, RecordEmbedRefs::AppBskyEmbedExternalMain};
 use atrium_api::types::string::{Datetime, Language};
 use bsky_sdk::BskyAgent;
+use convert_case::{Case, Casing};
 use ipld_core::ipld::Ipld;
 use lambda_http::{
     run, service_fn,
@@ -46,7 +47,10 @@ impl TryFrom<StatuspageIncident> for RecordData {
         let latest_update = sorted_updates
             .first()
             .ok_or(Error::from("No incident update information provided"))?;
-        let update_text: String = latest_update.body.chars().take(250).collect();
+        let mut update_text: String = latest_update.body.chars().take(250).collect();
+        if latest_update.body.chars().count() > 250 {
+            update_text = format!("{}...", update_text);
+        }
 
         let embed = Some(atrium_api::types::Union::Refs(AppBskyEmbedExternalMain(
             Box::new(atrium_api::types::Object {
@@ -74,7 +78,11 @@ impl TryFrom<StatuspageIncident> for RecordData {
             langs,
             reply: None,
             tags: None,
-            text: format!("[update] {}: {}", incident.status, update_text),
+            text: format!(
+                "[update] {}: {}",
+                incident.status.to_case(Case::Title),
+                update_text
+            ),
         })
     }
 }
