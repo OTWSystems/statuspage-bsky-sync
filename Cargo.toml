@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-atrium-api = "0.25.2"
+atrium-api = "0.25.6"
 bsky-sdk = "0.1.18"
 convert_case = "0.9.0"
 ipld-core = "0.4.2"
