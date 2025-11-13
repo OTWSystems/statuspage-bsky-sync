@@ -4,3 +4,11 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    groups:
+      bsky:
+        patterns:
+          - "atrium-api"
+          - "bsky-sdk"
+      serde:
+        patterns:
+          - "serde*"
