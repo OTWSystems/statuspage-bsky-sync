@@ -11,6 +11,6 @@ ipld-core = "0.4.2"
 lambda_http = { version = "0.17.0", features = ["apigw_http"] }
 openssl = { version = "0.10.75", features = ["vendored"] }
 serde = { version = "1.0.228", features = ["derive"] }
-serde_with = { version = "3.15.1", features = ["macros"] }
+serde_with = { version = "3.16.1", features = ["macros"] }
 
 tokio = { version = "1", features = ["macros"] }
