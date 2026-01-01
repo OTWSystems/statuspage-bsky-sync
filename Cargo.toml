@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-atrium-api = "0.25.6"
-bsky-sdk = "0.1.22"
+atrium-api = "0.25.7"
+bsky-sdk = "0.1.23"
 convert_case = "0.10.0"
 ipld-core = "0.4.2"
 lambda_http = { version = "1.0.1", features = ["apigw_http"] }
