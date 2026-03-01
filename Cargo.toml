@@ -7,7 +7,7 @@ edition = "2021"
 atrium-api = "0.25.7"
 bsky-sdk = "0.1.23"
 convert_case = "0.11.0"
-ipld-core = "0.4.2"
+ipld-core = "0.4.3"
 lambda_http = { version = "1.0.2", features = ["apigw_http"] }
 openssl = { version = "0.10.75", features = ["vendored"] }
 serde = { version = "1.0.228", features = ["derive"] }
