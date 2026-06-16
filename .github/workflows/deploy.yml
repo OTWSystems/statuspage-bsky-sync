@@ -4,6 +4,10 @@ on:
 
 concurrency: one-deploy-at-a-time
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
