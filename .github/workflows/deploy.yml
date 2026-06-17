@@ -20,4 +20,4 @@ jobs:
           role-to-assume: ${{ secrets.ROLE }}
           aws-region: us-west-2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - run: cargo lambda build --release && cargo lambda deploy -p statuspage
+      - run: cargo lambda build --release && cargo lambda deploy -r us-west-2
