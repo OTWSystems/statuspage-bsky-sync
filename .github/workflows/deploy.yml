@@ -11,6 +11,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    container: ghcr.io/cargo-lambda/cargo-lambda@sha256:087f8506865ad5c5e905eed0eb4a86583441144367ba7bc4a95d36e789163cad
     environment: production
 
     steps:
