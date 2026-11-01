@@ -92,9 +92,9 @@ dependencies = [
 
 [[package]]
 name = "atrium-api"
-version = "0.25.8"
+version = "0.26.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e04c38c6bfc922a7950a13ad52f8d21bee77020b90e822364c7ec8625c4cd403"
+checksum = "b0b9945dc5f78b415822cd89a5b5823da949df1c6b698fcd3f9aa3a6f6631d92"
 dependencies = [
  "atrium-common",
  "atrium-xrpc",
@@ -213,9 +213,9 @@ dependencies = [
 
 [[package]]
 name = "bsky-sdk"
-version = "0.1.24"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0e3bc207e44975454fd3339789a8137161cccd73ef9414e52f7e9f95e4cb0a9a"
+checksum = "004fd2f1c4c074449e6457ed632f597ead676181324893fb80f81e071a85d54c"
 dependencies = [
  "anyhow",
  "atrium-api",
