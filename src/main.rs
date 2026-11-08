@@ -57,6 +57,7 @@ impl TryFrom<StatuspageIncident> for RecordData {
                 data: atrium_api::app::bsky::embed::external::MainData {
                     external: atrium_api::types::Object {
                         data: ExternalData {
+                            associated_refs: None,
                             description: update_text.clone(),
                             thumb: None,
                             title: incident.name,
